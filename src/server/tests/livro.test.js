@@ -1,6 +1,6 @@
-const request = require('supertest');
-const { app, server } = require('../server.js');
-const db = require('../db/database.js');
+import request from 'supertest';
+import { app, server } from '../server.js';
+import db from '../db/database.js';
 
 describe('API de Livros', () => {
   beforeEach(async () => {

@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const db = require('../db/database.js');
+import Joi from 'joi';
+import db from '../db/database.js';
 
 /**
  * @description Obtém todos os livros do banco de dados.
@@ -7,7 +7,7 @@ const db = require('../db/database.js');
  * @param {object} res - O objeto de resposta.
  * @param {function} next - A próxima função de middleware.
  */
-const getLivros = async (req, res, next) => {
+export const getLivros = async (req, res, next) => {
   try {
     const livros = await db('livros').select('*');
     res.json(livros);
@@ -22,7 +22,7 @@ const getLivros = async (req, res, next) => {
  * @param {object} res - O objeto de resposta.
  * @param {function} next - A próxima função de middleware.
  */
-const getLivroById = async (req, res, next) => {
+export const getLivroById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const livro = await db('livros').where({ id }).first();
@@ -42,7 +42,7 @@ const getLivroById = async (req, res, next) => {
  * @param {object} res - O objeto de resposta.
  * @param {function} next - A próxima função de middleware.
  */
-const createLivro = async (req, res, next) => {
+export const createLivro = async (req, res, next) => {
   try {
     const schema = Joi.object({
       id: Joi.number().integer().required().messages({
@@ -92,7 +92,7 @@ const createLivro = async (req, res, next) => {
  * @param {object} res - O objeto de resposta.
  * @param {function} next - A próxima função de middleware.
  */
-const updateLivro = async (req, res, next) => {
+export const updateLivro = async (req, res, next) => {
   try {
     const { id } = req.params;
     const schema = Joi.object({
@@ -143,7 +143,7 @@ const updateLivro = async (req, res, next) => {
  * @param {object} res - O objeto de resposta.
  * @param {function} next - A próxima função de middleware.
  */
-const deleteLivro = async (req, res, next) => {
+export const deleteLivro = async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedCount = await db('livros').where({ id }).del();
@@ -155,12 +155,4 @@ const deleteLivro = async (req, res, next) => {
   } catch (error) {
     next({ status: 500, message: 'Erro ao deletar o livro.', error });
   }
-};
-
-module.exports = {
-  getLivros,
-  getLivroById,
-  createLivro,
-  updateLivro,
-  deleteLivro,
 };

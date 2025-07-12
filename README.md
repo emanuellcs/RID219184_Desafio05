@@ -1,47 +1,54 @@
 # RID219184_Desafio05
-Desafio 05 do curso de Engenheiro de Software da Escola DNC
+
+Este projeto é o Desafio 05 do curso de Engenheiro de Software da Escola DNC. Ele consiste em um sistema de gerenciamento de livros, com um backend em Node.js e Express, e um frontend desenvolvido em React com Vite.
 
 ## Visão Geral do Projeto
 
-Este projeto é um sistema de biblioteca online com um back-end em Node.js e Express e um front-end em React com Vite.
+O sistema permite o cadastro, listagem, edição e exclusão de livros. O backend gerencia a persistência dos dados utilizando SQLite, enquanto o frontend oferece uma interface intuitiva para interagir com a aplicação.
 
-A implantação do front-end foi aprimorada.
+## Tecnologias Utilizadas
+
+### Backend
+*   **Node.js**: Ambiente de execução JavaScript.
+*   **Express**: Framework web para Node.js.
+*   **Knex.js**: Construtor de queries SQL para Node.js.
+*   **SQLite3**: Banco de dados leve e embarcado.
+*   **Joi**: Validação de esquemas de dados.
+*   **CORS**: Middleware para habilitar o Cross-Origin Resource Sharing.
+
+### Frontend
+*   **React**: Biblioteca JavaScript para construção de interfaces de usuário.
+*   **Vite**: Ferramenta de build rápida para projetos web.
+*   **Axios**: Cliente HTTP baseado em Promises para o navegador e Node.js.
+*   **React Router DOM**: Roteamento declarativo para React.
+*   **Sass**: Pré-processador CSS.
+*   **React Toastify**: Biblioteca para notificações toast.
 
 ## Configuração do Ambiente de Desenvolvimento
 
+Para configurar e executar o projeto em sua máquina local, siga os passos abaixo:
+
 ### Pré-requisitos
 
-- Node.js
-- PostgreSQL
+Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 14 ou superior) instalado em sua máquina.
 
 ### Configuração do Backend
 
-1.  **Instale as Dependências**: No terminal, na raiz do projeto, execute:
+1.  **Instale as Dependências**:
+    Navegue até a raiz do projeto no terminal e execute o comando para instalar todas as dependências do backend e frontend:
     ```bash
     npm install
     ```
 
-2.  **Configure o PostgreSQL**:
-    *   Certifique-se de que o PostgreSQL esteja instalado e em execução.
-    *   Crie um novo banco de dados e um usuário para a aplicação.
-
-3.  **Configure as Variáveis de Ambiente**:
-    *   Crie um arquivo `.env` na raiz do projeto.
-    *   Adicione os detalhes de conexão do seu banco de dados PostgreSQL ao arquivo `.env`:
-        ```
-        DB_USER=seu_usuario_db
-        DB_HOST=localhost
-        DB_DATABASE=seu_banco_de_dados
-        DB_PASSWORD=sua_senha_db
-        DB_PORT=5432
-        ```
-
-4.  **Inicialize o Banco de Dados**: Execute o seguinte comando para criar a tabela `livros`:
+2.  **Inicialize o Banco de Dados SQLite**:
+    O projeto utiliza SQLite como banco de dados. Para criar o arquivo do banco de dados e a tabela `livros`, execute o seguinte comando:
     ```bash
     npm run db:init
     ```
+    Este comando criará o arquivo `database.sqlite` dentro de `src/server/db/` e a tabela `livros`.
 
-5.  **Inicie o Servidor de Backend**:
+3.  **Inicie o Servidor de Backend**:
+    Após a instalação das dependências e a inicialização do banco de dados, inicie o servidor backend com:
     ```bash
     npm start
     ```
@@ -49,8 +56,16 @@ A implantação do front-end foi aprimorada.
 
 ### Configuração do Frontend
 
-1.  **Inicie o Servidor de Frontend**: Em um novo terminal, execute:
+1.  **Inicie o Servidor de Frontend**:
+    Em um novo terminal (ou na mesma janela, após iniciar o backend), execute o comando para iniciar o servidor de desenvolvimento do frontend:
     ```bash
     npm run dev
     ```
-    O servidor de desenvolvimento do frontend estará disponível em `http://localhost:3001`.
+    O servidor de desenvolvimento do frontend estará disponível em `http://localhost:5173` (ou outra porta disponível, caso a 5173 esteja em uso).
+
+## Testes
+
+Para executar os testes automatizados do projeto, utilize o seguinte comando:
+
+```bash
+npm test

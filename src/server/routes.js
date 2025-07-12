@@ -1,12 +1,12 @@
 // Define as rotas da API para a gestão de livros.
-const express = require('express');
-const {
+import express from 'express';
+import {
   getLivros,
   getLivroById,
   createLivro,
   updateLivro,
   deleteLivro,
-} = require('./controllers/livroController.js');
+} from './controllers/livroController.js';
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ router.put('/livros/:id', updateLivro);
 // Rota para remover um livro pelo ID.
 router.delete('/livros/:id', deleteLivro);
 
-module.exports = router;
+export default router;
