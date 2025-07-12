@@ -1,9 +1,9 @@
-import express from 'express';
-import serverless from 'serverless-http';
-import cors from 'cors';
-import Joi from 'joi';
-import pg from 'pg';
-import dotenv from 'dotenv';
+const express = require('express');
+const serverless = require('serverless-http');
+const cors = require('cors');
+const Joi = require('joi');
+const pg = require('pg');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ const pool = new Pool({
 });
 
 // Obtém todos os livros do banco de dados.
-export const getLivros = async (req, res, next) => {
+const getLivros = async (req, res, next) => {
   try {
     const result = await pool.query('SELECT * FROM livros');
     res.json(result.rows);
@@ -27,7 +27,7 @@ export const getLivros = async (req, res, next) => {
 };
 
 // Obtém um livro específico por ID do banco de dados.
-export const getLivroById = async (req, res, next) => {
+const getLivroById = async (req, res, next) => {
   try {
     const { id } = req.params;
     console.log('getLivroById: Requested ID:', id);
@@ -46,7 +46,7 @@ export const getLivroById = async (req, res, next) => {
 };
 
 // Cria um novo livro no banco de dados após validação dos dados.
-export const createLivro = async (req, res, next) => {
+const createLivro = async (req, res, next) => {
   try {
     console.log('createLivro: Incoming request body:', req.body);
     // Define o esquema de validação para os dados do livro.
@@ -99,7 +99,7 @@ export const createLivro = async (req, res, next) => {
 };
 
 // Atualiza um livro existente no banco de dados após validação dos dados.
-export const updateLivro = async (req, res, next) => {
+const updateLivro = async (req, res, next) => {
   try {
     const { id } = req.params;
     console.log('updateLivro: Incoming request body:', req.body, 'ID:', id);
@@ -156,7 +156,7 @@ export const updateLivro = async (req, res, next) => {
 };
 
 // Deleta um livro do banco de dados por ID.
-export const deleteLivro = async (req, res, next) => {
+const deleteLivro = async (req, res, next) => {
   try {
     const { id } = req.params;
     console.log('deleteLivro: ID to be deleted:', id);
@@ -193,4 +193,11 @@ app.use((err, req, res, next) => {
   res.status(500).send('Algo deu errado no servidor!');
 });
 
-export const handler = serverless(app);
+module.exports.handler = serverless(app);
+module.exports = {
+  getLivros,
+  getLivroById,
+  createLivro,
+  updateLivro,
+  deleteLivro,
+};

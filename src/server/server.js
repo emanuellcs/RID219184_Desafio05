@@ -1,7 +1,7 @@
 // Configuração do servidor Express.
-import express from 'express';
-import cors from 'cors';
-import routes from './routes.js';
+const express = require('express');
+const cors = require('cors');
+const routes = require('./routes.js');
 
 const app = express();
 const port = process.env.PORT || 3002;
@@ -23,4 +23,4 @@ app.listen(port, () => {
 });
 
 // Export the app for testing purposes
-export default app;
+module.exports = app;
