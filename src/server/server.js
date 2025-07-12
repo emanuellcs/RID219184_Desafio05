@@ -18,9 +18,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Servidor está sendo executado na porta ${port}`);
-});
 
 // Export the app for testing purposes
 module.exports = app;

@@ -1,11 +1,12 @@
 const Joi = require('joi');
-const pool = require('../db/database.js');
+const supabase = require('../db/supabase.js');
 
 // Obtém todos os livros do banco de dados.
 const getLivros = async (req, res, next) => {
   try {
-    const result = await pool.query('SELECT * FROM livros');
-    res.json(result.rows);
+    const { data: livros, error: supabaseError } = await supabase.from('livros').select('*');
+    if (supabaseError) throw supabaseError;
+    res.json(livros);
   } catch (error) {
     next(error);
   }
@@ -16,10 +17,11 @@ const getLivroById = async (req, res, next) => {
   try {
     const { id } = req.params;
     console.log('getLivroById: Requested ID:', id);
-    const result = await pool.query('SELECT * FROM livros WHERE id = $1', [id]);
-    if (result.rows.length > 0) {
-      console.log('getLivroById: Result:', result.rows[0]);
-      res.json(result.rows[0]);
+    const { data: livro, error: supabaseError } = await supabase.from('livros').select('*').eq('id', id).single();
+    if (supabaseError) throw supabaseError;
+    if (livro) {
+      console.log('getLivroById: Result:', livro);
+      res.json(livro);
     } else {
       console.log('getLivroById: Book not found for ID:', id);
       res.status(404).send('Livro não encontrado');
@@ -73,11 +75,12 @@ const createLivro = async (req, res, next) => {
     console.log('createLivro: Data to be inserted:', value);
 
     // Insere o novo livro no banco de dados.
-    const result = await pool.query(
-      'INSERT INTO livros (id, titulo, numero_paginas, isbn, editora) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [id, titulo, numero_paginas, isbn, editora]
-    );
-    res.status(201).json(result.rows[0]);
+    const { data: newLivro, error: supabaseError } = await supabase
+      .from('livros')
+      .insert([{ id, titulo, numero_paginas, isbn, editora }])
+      .select();
+    if (supabaseError) throw supabaseError;
+    res.status(201).json(newLivro[0]);
   } catch (error) {
     next(error);
   }
@@ -128,10 +131,15 @@ const updateLivro = async (req, res, next) => {
 
     const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
     // Executa a atualização no banco de dados.
-    const result = await pool.query(`UPDATE livros SET ${setClause} WHERE id = $${fields.length + 1} RETURNING *`, [...values, id]);
+    const { data: updatedLivro, error: supabaseError } = await supabase
+      .from('livros')
+      .update(value)
+      .eq('id', id)
+      .select();
+    if (supabaseError) throw supabaseError;
     // Verifica se o livro foi atualizado.
-    if (result.rows.length > 0) {
-      res.json(result.rows[0]);
+    if (updatedLivro && updatedLivro.length > 0) {
+      res.json(updatedLivro[0]);
     } else {
       res.status(404).send('Livro não encontrado');
     }
@@ -146,9 +154,10 @@ const deleteLivro = async (req, res, next) => {
     const { id } = req.params;
     console.log('deleteLivro: ID to be deleted:', id);
     // Executa a exclusão no banco de dados.
-    const result = await pool.query('DELETE FROM livros WHERE id = $1', [id]);
+    const { error: supabaseError } = await supabase.from('livros').delete().eq('id', id);
+    if (supabaseError) throw supabaseError;
     // Verifica se o livro foi deletado.
-    if (result.rowCount > 0) {
+    if (!supabaseError) { // Assuming successful deletion if no error
       console.log('deleteLivro: Book deleted for ID:', id);
       res.status(204).send();
     } else {
