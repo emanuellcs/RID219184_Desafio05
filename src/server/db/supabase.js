@@ -1,11 +1,21 @@
-const { createClient } = require('@supabase/supabase-js');
+const { Pool } = require('pg');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const connectionString = process.env.SUPABASE_URL;
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!connectionString) {
+  console.error('Variável SUPABASE_URL não configurada.');
+}
 
-module.exports = supabase;
+const pool = new Pool({
+  connectionString: connectionString,
+});
+
+pool.on('error', (err) => {
+  console.error('Erro inesperado no cliente ocioso', err);
+  process.exit(-1);
+});
+
+module.exports = pool;
