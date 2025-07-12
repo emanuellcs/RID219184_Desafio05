@@ -52,7 +52,7 @@ Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 14 ou superior) i
     ```bash
     npm start
     ```
-    O backend estará em execução em `http://localhost:3001`.
+    O backend estará em execução em `http://localhost:3002`.
 
 ### Configuração do Frontend
 
@@ -61,7 +61,7 @@ Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 14 ou superior) i
     ```bash
     npm run dev
     ```
-    O servidor de desenvolvimento do frontend estará disponível em `http://localhost:5173` (ou outra porta disponível, caso a 5173 esteja em uso).
+    O servidor de desenvolvimento do frontend estará disponível em `http://localhost:3001` (ou outra porta disponível, caso a 3001 esteja em uso).
 
 ## Testes
 
