@@ -1,0 +1,5 @@
+@use '../../_forms.scss';
+
+.livrosCadastro {
+  @extend .form-container;
+}

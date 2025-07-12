@@ -1,0 +1,104 @@
+@use "sass:color";
+
+.livros {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text-color);
+    }
+
+    span {
+      font-size: 0.95rem;
+      color: var(--secondary-color);
+      font-weight: 500;
+    }
+  }
+
+  .botoes {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+  }
+
+  .edit {
+    background-color: var(--primary-color);
+    &:hover {
+      background-color: var(--primary-color-dark);
+    }
+  }
+
+  .delete {
+    background-color: #dc3545; /* Red for delete */
+    &:hover {
+      background-color: color.adjust(#dc3545, $lightness: -10%);
+    }
+  }
+}
+
+.no-books-message {
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--secondary-color);
+  margin-top: 3rem;
+}
