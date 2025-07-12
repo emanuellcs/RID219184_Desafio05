@@ -7,7 +7,10 @@ export default defineConfig({
   server: {
     port: 3001, // Set frontend to run on port 3001
     proxy: {
-      '/api': 'http://localhost:3002',
+      '/api': {
+        target: 'http://localhost:3000', // Vercel dev server default port
+        changeOrigin: true,
+      },
     },
   },
 })

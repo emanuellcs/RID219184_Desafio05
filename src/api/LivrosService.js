@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: '/api',  // Unified for both local and production on Vercel
   headers: {
     'Content-Type': 'application/json',
   },

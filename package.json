@@ -2,14 +2,16 @@
   "name": "front",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
+    "vercel-dev": "vercel dev",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "node src/server/server.js",
-    "db:init": "node src/server/db/init.js",
-    "test": "jest"
+    "deploy": "vercel --prod",
+    "test": "jest",
+    "test:api": "node test-api.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.5",
@@ -26,7 +28,6 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "react-toastify": "^11.0.5",
-    "serverless-http": "^3.2.0",
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
@@ -43,6 +44,7 @@
     "jest": "^30.0.4",
     "sass": "^1.89.2",
     "supertest": "^7.1.3",
+    "vercel": "^44.4.1",
     "vite": "^4.3.0"
   }
 }

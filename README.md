@@ -1,56 +1,159 @@
-# RID219184_Desafio05
-Desafio 05 do curso de Engenheiro de Software da Escola DNC
+# RID219184_Desafio05 - Book Management System
 
-## Visão Geral do Projeto
+A modern book management system built with React, Vite, Vercel, and Supabase.
 
-Este projeto é um sistema de biblioteca online com um back-end em Node.js e Express e um front-end em React com Vite.
+## 🚀 Overview
 
-A implantação do front-end foi aprimorada.
+This project is a full-stack book management application that allows users to:
+- View a list of books
+- Add new books
+- Edit existing books
+- Delete books
+- Search and filter books
 
-## Configuração do Ambiente de Desenvolvimento
+## 🛠️ Technology Stack
 
-### Pré-requisitos
+- **Frontend**: React 18 + Vite
+- **Styling**: SCSS
+- **Routing**: React Router v6
+- **Backend**: Vercel Serverless Functions
+- **Database**: Supabase (PostgreSQL)
+- **Deployment**: Vercel
 
-- Node.js
-- PostgreSQL
+## ⚡ Quick Start
 
-### Configuração do Backend
+### Prerequisites
 
-1.  **Instale as Dependências**: No terminal, na raiz do projeto, execute:
-    ```bash
-    npm install
-    ```
+- Node.js 18.x or higher
+- npm or yarn
+- Vercel account (free)
+- Supabase account (free)
 
-2.  **Configure o PostgreSQL**:
-    *   Certifique-se de que o PostgreSQL esteja instalado e em execução.
-    *   Crie um novo banco de dados e um usuário para a aplicação.
+### Installation
 
-3.  **Configure as Variáveis de Ambiente**:
-    *   Crie um arquivo `.env` na raiz do projeto.
-    *   Adicione os detalhes de conexão do seu banco de dados PostgreSQL ao arquivo `.env`:
-        ```
-        DB_USER=seu_usuario_db
-        DB_HOST=localhost
-        DB_DATABASE=seu_banco_de_dados
-        DB_PASSWORD=sua_senha_db
-        DB_PORT=5432
-        ```
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd RID219184_Desafio05
+   ```
 
-4.  **Inicialize o Banco de Dados**: Execute o seguinte comando para criar a tabela `livros`:
-    ```bash
-    npm run db:init
-    ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-5.  **Inicie o Servidor de Backend**:
-    ```bash
-    npm start
-    ```
-    O backend estará em execução em `http://localhost:3001`.
+3. **Set up environment variables**
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   Edit `.env.local` and add your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-### Configuração do Frontend
+4. **Run development server**
+   ```bash
+   npm run vercel-dev
+   ```
 
-1.  **Inicie o Servidor de Frontend**: Em um novo terminal, execute:
-    ```bash
-    npm run dev
-    ```
-    O servidor de desenvolvimento do frontend estará disponível em `http://localhost:3001`.
+The application will be available at http://localhost:3000
+
+## 📚 Documentation
+
+For detailed setup instructions, deployment guides, and troubleshooting:
+
+- **[Setup Instructions](./SETUP_INSTRUCTIONS.md)** - Complete guide for local development and production deployment
+- **[Test Checklist](./TEST_CHECKLIST.md)** - Comprehensive testing procedures
+- **[Migration Plan](./MIGRATION_PLAN.md)** - Architecture and migration details
+
+## 🗂️ Project Structure
+
+```
+├── api/                    # Vercel serverless functions
+│   └── livros/            # Book API endpoints
+├── src/
+│   ├── api/               # Frontend API service layer
+│   ├── components/        # Reusable React components
+│   ├── db/                # Database schema
+│   ├── lib/               # Utility libraries (Supabase client, validation)
+│   ├── views/             # Page components
+│   └── main.jsx           # Application entry point
+├── public/                # Static assets
+├── .env.local.example     # Environment variables template
+├── vercel.json           # Vercel configuration
+└── vite.config.js        # Vite configuration
+```
+
+## 🔧 Available Scripts
+
+- `npm run dev` - Start Vite development server
+- `npm run vercel-dev` - Start Vercel development environment
+- `npm run build` - Build for production
+- `npm run deploy` - Deploy to Vercel
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests
+
+## 🚀 Deployment
+
+Deploy to Vercel with one command:
+
+```bash
+npm run deploy
+```
+
+Or use the Vercel CLI:
+
+```bash
+vercel --prod
+```
+
+Remember to set environment variables in your Vercel dashboard!
+
+## 🔒 Environment Variables
+
+### Development
+Create a `.env.local` file with:
+```
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+### Production
+Set the same variables in your Vercel project settings.
+
+## 🧪 Testing
+
+Run the test suite:
+```bash
+npm test
+```
+
+For API testing:
+```bash
+npm run test:api
+```
+
+See [TEST_CHECKLIST.md](./TEST_CHECKLIST.md) for manual testing procedures.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is part of the DNC School Software Engineer course - Challenge 05.
+
+## 🆘 Support
+
+For detailed troubleshooting and setup help, please refer to:
+- [Setup Instructions](./SETUP_INSTRUCTIONS.md)
+- [Test Checklist](./TEST_CHECKLIST.md)
+
+---
+
+Built with ❤️ using React, Vercel, and Supabase
