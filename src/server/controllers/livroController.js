@@ -1,42 +1,49 @@
 const Joi = require('joi');
-const supabase = require('../db/supabase.js');
+const db = require('../db/database.js');
 
-// Obtém todos os livros do banco de dados.
+/**
+ * @description Obtém todos os livros do banco de dados.
+ * @param {object} req - O objeto de requisição.
+ * @param {object} res - O objeto de resposta.
+ * @param {function} next - A próxima função de middleware.
+ */
 const getLivros = async (req, res, next) => {
   try {
-    const { data: livros, error: supabaseError } = await supabase.from('livros').select('*');
-    if (supabaseError) throw supabaseError;
+    const livros = await db('livros').select('*');
     res.json(livros);
   } catch (error) {
-    next(error);
+    next({ status: 500, message: 'Erro ao buscar livros.', error });
   }
 };
 
-// Obtém um livro específico por ID do banco de dados.
+/**
+ * @description Obtém um livro específico por ID do banco de dados.
+ * @param {object} req - O objeto de requisição.
+ * @param {object} res - O objeto de resposta.
+ * @param {function} next - A próxima função de middleware.
+ */
 const getLivroById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log('getLivroById: Requested ID:', id);
-    const { data: livro, error: supabaseError } = await supabase.from('livros').select('*').eq('id', id).single();
-    if (supabaseError) throw supabaseError;
+    const livro = await db('livros').where({ id }).first();
     if (livro) {
-      console.log('getLivroById: Result:', livro);
       res.json(livro);
     } else {
-      console.log('getLivroById: Book not found for ID:', id);
-      res.status(404).send('Livro não encontrado');
+      next({ status: 404, message: 'Livro não encontrado.' });
     }
   } catch (error) {
-    console.error('Error in getLivroById:', error);
-    next(error);
+    next({ status: 500, message: 'Erro ao buscar o livro.', error });
   }
 };
 
-// Cria um novo livro no banco de dados após validação dos dados.
+/**
+ * @description Cria um novo livro no banco de dados após validação dos dados.
+ * @param {object} req - O objeto de requisição.
+ * @param {object} res - O objeto de resposta.
+ * @param {function} next - A próxima função de middleware.
+ */
 const createLivro = async (req, res, next) => {
   try {
-    console.log('createLivro: Incoming request body:', req.body);
-    // Define o esquema de validação para os dados do livro.
     const schema = Joi.object({
       id: Joi.number().integer().required().messages({
         'any.required': 'O campo id é obrigatório.',
@@ -64,34 +71,30 @@ const createLivro = async (req, res, next) => {
       }),
     });
 
-    // Valida os dados da requisição.
     const { error, value } = schema.validate(req.body);
     if (error) {
-      console.log('createLivro: Joi validation error:', error.details[0].message);
-      return res.status(400).json({ message: error.details[0].message });
+      return next({ status: 400, message: error.details[0].message });
     }
 
-    const { id, titulo, numero_paginas, isbn, editora } = value;
-    console.log('createLivro: Data to be inserted:', value);
-
-    // Insere o novo livro no banco de dados.
-    const { data: newLivro, error: supabaseError } = await supabase
-      .from('livros')
-      .insert([{ id, titulo, numero_paginas, isbn, editora }])
-      .select();
-    if (supabaseError) throw supabaseError;
-    res.status(201).json(newLivro[0]);
+    const [newLivro] = await db('livros').insert(value).returning('*');
+    res.status(201).json(newLivro);
   } catch (error) {
-    next(error);
+    if (error.code === 'SQLITE_CONSTRAINT') {
+      return next({ status: 409, message: 'Já existe um livro com o ID fornecido.' });
+    }
+    next({ status: 500, message: 'Erro ao criar o livro.', error });
   }
 };
 
-// Atualiza um livro existente no banco de dados após validação dos dados.
+/**
+ * @description Atualiza um livro existente no banco de dados após validação dos dados.
+ * @param {object} req - O objeto de requisição.
+ * @param {object} res - O objeto de resposta.
+ * @param {function} next - A próxima função de middleware.
+ */
 const updateLivro = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log('updateLivro: Incoming request body:', req.body, 'ID:', id);
-    // Define o esquema de validação para os dados de atualização do livro.
     const schema = Joi.object({
       id: Joi.number().integer().messages({
         'number.base': 'O campo id deve ser um número.',
@@ -114,58 +117,43 @@ const updateLivro = async (req, res, next) => {
       }),
     });
 
-    // Valida os dados da requisição.
     const { error, value } = schema.validate(req.body);
     if (error) {
-      console.log('updateLivro: Joi validation error:', error.details[0].message);
-      return res.status(400).json({ message: error.details[0].message });
+      return next({ status: 400, message: error.details[0].message });
     }
 
-    // Prepara a cláusula SET para a atualização do banco de dados.
-    const fields = Object.keys(value);
-    const values = Object.values(value);
-    if (fields.length === 0) {
-      return res.status(400).json({ message: 'Nenhum campo para atualizar.' });
+    if (Object.keys(value).length === 0) {
+      return next({ status: 400, message: 'Nenhum campo para atualizar.' });
     }
-    console.log('updateLivro: Data to be updated:', value, 'for ID:', id);
 
-    const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
-    // Executa a atualização no banco de dados.
-    const { data: updatedLivro, error: supabaseError } = await supabase
-      .from('livros')
-      .update(value)
-      .eq('id', id)
-      .select();
-    if (supabaseError) throw supabaseError;
-    // Verifica se o livro foi atualizado.
-    if (updatedLivro && updatedLivro.length > 0) {
-      res.json(updatedLivro[0]);
+    const [updatedLivro] = await db('livros').where({ id }).update(value).returning('*');
+    if (updatedLivro) {
+      res.json(updatedLivro);
     } else {
-      res.status(404).send('Livro não encontrado');
+      next({ status: 404, message: 'Livro não encontrado.' });
     }
   } catch (error) {
-    next(error);
+    next({ status: 500, message: 'Erro ao atualizar o livro.', error });
   }
 };
 
-// Deleta um livro do banco de dados por ID.
+/**
+ * @description Deleta um livro do banco de dados por ID.
+ * @param {object} req - O objeto de requisição.
+ * @param {object} res - O objeto de resposta.
+ * @param {function} next - A próxima função de middleware.
+ */
 const deleteLivro = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log('deleteLivro: ID to be deleted:', id);
-    // Executa a exclusão no banco de dados.
-    const { error: supabaseError } = await supabase.from('livros').delete().eq('id', id);
-    if (supabaseError) throw supabaseError;
-    // Verifica se o livro foi deletado.
-    if (!supabaseError) { // Assuming successful deletion if no error
-      console.log('deleteLivro: Book deleted for ID:', id);
+    const deletedCount = await db('livros').where({ id }).del();
+    if (deletedCount > 0) {
       res.status(204).send();
     } else {
-      console.log('deleteLivro: Book not found for ID:', id);
-      res.status(404).send('Livro não encontrado');
+      next({ status: 404, message: 'Livro não encontrado.' });
     }
   } catch (error) {
-    next(error);
+    next({ status: 500, message: 'Erro ao deletar o livro.', error });
   }
 };
 

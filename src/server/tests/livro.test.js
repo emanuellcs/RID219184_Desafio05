@@ -1,14 +1,17 @@
 const request = require('supertest');
-const app = require('../server.js');
-const pool = require('../db/database.js');
+const { app, server } = require('../server.js');
+const db = require('../db/database.js');
 
 describe('API de Livros', () => {
-  beforeAll(async () => {
-    await pool.query('DELETE FROM livros');
+  beforeEach(async () => {
+    // Limpa a tabela de livros antes de cada teste.
+    await db('livros').del();
   });
 
   afterAll(async () => {
-    await pool.end();
+    // Fecha a conexão com o banco de dados e o servidor após todos os testes.
+    await db.destroy();
+    server.close();
   });
 
   it('deve retornar um array vazio se não houver livros', async () => {
@@ -28,6 +31,20 @@ describe('API de Livros', () => {
     const res = await request(app).post('/api/livros').send(newBook);
     expect(res.statusCode).toEqual(201);
     expect(res.body).toEqual(expect.objectContaining(newBook));
+  });
+
+  it('deve retornar 409 para ID duplicado', async () => {
+    const newBook = {
+      id: 1,
+      titulo: 'Livro de Teste 1',
+      numero_paginas: 100,
+      isbn: '9781234567890',
+      editora: 'Editora de Teste',
+    };
+    await request(app).post('/api/livros').send(newBook);
+    const res = await request(app).post('/api/livros').send(newBook);
+    expect(res.statusCode).toEqual(409);
+    expect(res.body.message).toContain('Já existe um livro com o ID fornecido.');
   });
 
   it('deve retornar 400 para campo obrigatório ausente (titulo)', async () => {
@@ -56,6 +73,14 @@ describe('API de Livros', () => {
   });
 
   it('deve retornar um livro específico por ID', async () => {
+    const newBook = {
+      id: 1,
+      titulo: 'Livro de Teste 1',
+      numero_paginas: 100,
+      isbn: '9781234567890',
+      editora: 'Editora de Teste',
+    };
+    await request(app).post('/api/livros').send(newBook);
     const res = await request(app).get('/api/livros/1');
     expect(res.statusCode).toEqual(200);
     expect(res.body.id).toEqual(1);
@@ -64,16 +89,26 @@ describe('API de Livros', () => {
   it('deve retornar 404 para um ID inexistente', async () => {
     const res = await request(app).get('/api/livros/999');
     expect(res.statusCode).toEqual(404);
-    expect(res.text).toContain('Livro não encontrado');
+    expect(res.body.message).toContain('Livro não encontrado');
   });
 
   it('deve atualizar um livro existente com dados válidos', async () => {
+    const newBook = {
+      id: 1,
+      titulo: 'Livro de Teste 1',
+      numero_paginas: 100,
+      isbn: '9781234567890',
+      editora: 'Editora de Teste',
+    };
+    await request(app).post('/api/livros').send(newBook);
     const updatedBook = {
+      id: 2,
       titulo: 'Livro de Teste 1 Atualizado',
       numero_paginas: 120,
     };
     const res = await request(app).put('/api/livros/1').send(updatedBook);
     expect(res.statusCode).toEqual(200);
+    expect(res.body.id).toEqual(2);
     expect(res.body.titulo).toEqual('Livro de Teste 1 Atualizado');
     expect(res.body.numero_paginas).toEqual(120);
   });
@@ -95,6 +130,14 @@ describe('API de Livros', () => {
   });
 
   it('deve deletar um livro existente', async () => {
+    const newBook = {
+      id: 1,
+      titulo: 'Livro de Teste 1',
+      numero_paginas: 100,
+      isbn: '9781234567890',
+      editora: 'Editora de Teste',
+    };
+    await request(app).post('/api/livros').send(newBook);
     const res = await request(app).delete('/api/livros/1');
     expect(res.statusCode).toEqual(204);
   });
@@ -102,6 +145,6 @@ describe('API de Livros', () => {
   it('deve retornar 404 para um ID inexistente na exclusão', async () => {
     const res = await request(app).delete('/api/livros/999');
     expect(res.statusCode).toEqual(404);
-    expect(res.text).toContain('Livro não encontrado');
+    expect(res.body.message).toContain('Livro não encontrado');
   });
 });
