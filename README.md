@@ -1,71 +1,84 @@
-# RID219184_Desafio05
+# Sistema de Gerenciamento de Biblioteca
 
-Este projeto é o Desafio 05 do curso de Engenheiro de Software da Escola DNC. Ele consiste em um sistema de gerenciamento de livros, com um backend em Node.js e Express, e um frontend desenvolvido em React com Vite.
+Este projeto é uma aplicação web completa (full-stack) para gerenciar uma coleção de livros. Ele foi construído com uma arquitetura moderna, que separa o frontend (interface do usuário) do backend (lógica do servidor).
 
-## Visão Geral do Projeto
+*   **Frontend:** React (usando Vite para otimização)
+*   **Backend:** Node.js (usando o framework Express)
+*   **Banco de Dados:** SQLite
 
-O sistema permite o cadastro, listagem, edição e exclusão de livros. O backend gerencia a persistência dos dados utilizando SQLite, enquanto o frontend oferece uma interface intuitiva para interagir com a aplicação.
+### Por que SQLite?
 
-## Tecnologias Utilizadas
+Para este projeto, a escolha do SQLite como banco de dados foi intencional, visando a simplicidade e a facilidade de uso, especialmente por ser uma aplicação de escopo local.
 
-### Backend
-*   **Node.js**: Ambiente de execução JavaScript.
-*   **Express**: Framework web para Node.js.
-*   **Knex.js**: Construtor de queries SQL para Node.js.
-*   **SQLite3**: Banco de dados leve e embarcado.
-*   **Joi**: Validação de esquemas de dados.
-*   **CORS**: Middleware para habilitar o Cross-Origin Resource Sharing.
+## Estrutura do Projeto
 
-### Frontend
-*   **React**: Biblioteca JavaScript para construção de interfaces de usuário.
-*   **Vite**: Ferramenta de build rápida para projetos web.
-*   **Axios**: Cliente HTTP baseado em Promises para o navegador e Node.js.
-*   **React Router DOM**: Roteamento declarativo para React.
-*   **Sass**: Pré-processador CSS.
-*   **React Toastify**: Biblioteca para notificações toast.
+O repositório está organizado em dois diretórios principais, cada um funcionando como um projeto independente:
 
-## Configuração do Ambiente de Desenvolvimento
+*   `frontend/`: Contém a aplicação cliente desenvolvida em React, responsável por toda a interface visual e interação com o usuário.
+*   `backend/`: Contém o servidor em Node.js/Express, que gerencia as regras de negócio, a comunicação com o banco de dados e fornece a API para o frontend.
 
-Para configurar e executar o projeto em sua máquina local, siga os passos abaixo:
+Cada diretório possui seu próprio arquivo `package.json` e suas próprias dependências.
 
-### Pré-requisitos
+## Pré-requisitos
 
-Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 14 ou superior) instalado em sua máquina.
+Antes de começar, garanta que você tenha os seguintes softwares instalados:
 
-### Configuração do Backend
+*   [Node.js](https://nodejs.org/) (versão 18 ou superior é recomendada)
+*   [npm](https://www.npmjs.com/) (que já vem instalado com o Node.js) ou um gerenciador de pacotes compatível (como Yarn ou pnpm).
 
-1.  **Instale as Dependências**:
-    Navegue até a raiz do projeto no terminal e execute o comando para instalar todas as dependências do backend e frontend:
-    ```bash
-    npm install
-    ```
+## Configuração e Instalação
 
-2.  **Inicialize o Banco de Dados SQLite**:
-    O projeto utiliza SQLite como banco de dados. Para criar o arquivo do banco de dados e a tabela `livros`, execute o seguinte comando:
-    ```bash
-    npm run db:init
-    ```
-    Este comando criará o arquivo `database.sqlite` dentro de `src/server/db/` e a tabela `livros`.
+Siga os passos abaixo para configurar e executar a aplicação completa (backend e frontend).
 
-3.  **Inicie o Servidor de Backend**:
-    Após a instalação das dependências e a inicialização do banco de dados, inicie o servidor backend com:
-    ```bash
-    npm start
-    ```
-    O backend estará em execução em `http://localhost:3002`.
+### 1. Configuração do Backend (Servidor)
 
-### Configuração do Frontend
-
-1.  **Inicie o Servidor de Frontend**:
-    Em um novo terminal (ou na mesma janela, após iniciar o backend), execute o comando para iniciar o servidor de desenvolvimento do frontend:
-    ```bash
-    npm run dev
-    ```
-    O servidor de desenvolvimento do frontend estará disponível em `http://localhost:3001` (ou outra porta disponível, caso a 3001 esteja em uso).
-
-## Testes
-
-Para executar os testes automatizados do projeto, utilize o seguinte comando:
+O backend é responsável por fornecer os dados e a lógica da aplicação.
 
 ```bash
-npm test
+# 1. Entre no diretório do backend
+cd backend
+
+# 2. Instale as dependências necessárias
+npm install
+
+# 3. Execute as "migrations" do banco de dados
+# Este comando criará o arquivo do banco de dados e a tabela 'livros'.
+npm run migrate
+
+# 4. Inicie o servidor
+# O servidor estará disponível em http://localhost:3001
+npm start
+```
+
+### 2. Configuração do Frontend (Cliente)
+
+O frontend é a interface com a qual o usuário irá interagir.
+
+```bash
+# 1. Em um novo terminal, entre no diretório do frontend
+cd frontend
+
+# 2. Instale as dependências necessárias
+npm install
+
+# 3. Inicie o servidor de desenvolvimento
+# A aplicação estará disponível no seu navegador em http://localhost:5173
+npm run dev
+```
+
+## Scripts Disponíveis
+
+Aqui estão os comandos úteis que você pode executar em cada diretório.
+
+### Backend (`backend/`)
+
+*   `npm start`: Inicia o servidor em modo de produção.
+*   `npm run dev`: Inicia o servidor em modo de desenvolvimento com `nodemon`, que reinicia o servidor automaticamente sempre que um arquivo é alterado.
+*   `npm test`: Executa os testes automatizados do backend com Jest.
+*   `npm run migrate`: Aplica as atualizações na estrutura do banco de dados.
+
+### Frontend (`frontend/`)
+
+*   `npm run dev`: Inicia o servidor de desenvolvimento do Vite, com recarregamento rápido para uma experiência de desenvolvimento ágil.
+*   `npm run build`: Gera a versão final e otimizada da aplicação para ser implantada em um servidor de produção.
+*   `npm run preview`: Permite visualizar a versão de produção localmente antes de publicá-la.
