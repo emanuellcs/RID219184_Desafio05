@@ -133,6 +133,10 @@ export const updateLivro = async (req, res, next) => {
       next({ status: 404, message: 'Livro não encontrado.' });
     }
   } catch (error) {
+    console.error('Erro no updateLivro:', error); // Added logging
+    if (error.code === 'SQLITE_CONSTRAINT') {
+      return next({ status: 409, message: 'Já existe um livro com o ID fornecido ou o novo ID já está em uso.' });
+    }
     next({ status: 500, message: 'Erro ao atualizar o livro.', error });
   }
 };

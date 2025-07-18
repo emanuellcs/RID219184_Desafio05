@@ -46,7 +46,7 @@ npm install
 npm run migrate
 
 # 4. Inicie o servidor
-# O servidor estará disponível em http://localhost:3001
+# O servidor estará disponível em http://localhost:3002
 npm start
 ```
 
@@ -62,23 +62,6 @@ cd frontend
 npm install
 
 # 3. Inicie o servidor de desenvolvimento
-# A aplicação estará disponível no seu navegador em http://localhost:5173
+# A aplicação estará disponível no seu navegador em http://localhost:3001
 npm run dev
 ```
-
-## Scripts Disponíveis
-
-Aqui estão os comandos úteis que você pode executar em cada diretório.
-
-### Backend (`backend/`)
-
-*   `npm start`: Inicia o servidor em modo de produção.
-*   `npm run dev`: Inicia o servidor em modo de desenvolvimento com `nodemon`, que reinicia o servidor automaticamente sempre que um arquivo é alterado.
-*   `npm test`: Executa os testes automatizados do backend com Jest.
-*   `npm run migrate`: Aplica as atualizações na estrutura do banco de dados.
-
-### Frontend (`frontend/`)
-
-*   `npm run dev`: Inicia o servidor de desenvolvimento do Vite, com recarregamento rápido para uma experiência de desenvolvimento ágil.
-*   `npm run build`: Gera a versão final e otimizada da aplicação para ser implantada em um servidor de produção.
-*   `npm run preview`: Permite visualizar a versão de produção localmente antes de publicá-la.

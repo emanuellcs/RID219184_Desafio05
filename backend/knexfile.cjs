@@ -9,15 +9,15 @@ module.exports = {
     // Configurações de conexão
     connection: {
       // Caminho para o arquivo do banco de dados SQLite
-      filename: path.resolve(__dirname, 'src', 'server', 'db', 'database.sqlite'),
+      filename: path.resolve(__dirname, 'server', 'db', 'database.sqlite'),
     },
     // Diretório para os arquivos de migração
     migrations: {
-      directory: path.resolve(__dirname, 'src', 'server', 'db', 'migrations'),
+      directory: path.resolve(__dirname, 'server', 'db', 'migrations'),
     },
     // Diretório para os arquivos de seed
     seeds: {
-      directory: path.resolve(__dirname, 'src', 'server', 'db', 'seeds'),
+      directory: path.resolve(__dirname, 'server', 'db', 'seeds'),
     },
     // Utiliza NULL como valor padrão
     useNullAsDefault: true,

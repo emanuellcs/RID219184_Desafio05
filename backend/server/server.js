@@ -17,7 +17,7 @@ app.use(errorHandler);
 
 // Inicia o servidor.
 const server = app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+  console.log(`Servidor rodando na porta ${port}. Base URL para API: /api`);
 });
 
 // Exporta a aplicação e o servidor para fins de teste.
